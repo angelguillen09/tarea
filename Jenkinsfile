@@ -54,7 +54,7 @@ node {
             sh "echo '${CONTENIDO}' > ${FICHERO}"
         }
         stage ("Guardar fichero") {
-            archiveArtifacts(artifacts: '${FICHERO}', followSymlinks: false)
+            archiveArtifacts(artifacts: "${FICHERO}"", followSymlinks: false)
             echo 'Fichero guardado'
         }
     }
