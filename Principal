@@ -60,7 +60,7 @@ node {
             parallel(
                 "Tarea 3": {
                     build(
-                        wait: false, 
+                        wait: true, 
                         job: 'Tarea', 
                         parameters: [
                             booleanParam(name: 'GENERAR_ERROR', value: false), 
@@ -73,7 +73,7 @@ node {
                 "Tarea 4": {
                     try{
                         build(
-                            wait: false, 
+                            wait: true, 
                             job: 'Tarea', 
                             parameters: [
                                 booleanParam(name: 'GENERAR_ERROR', value: false), 
