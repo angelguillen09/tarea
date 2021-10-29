@@ -51,28 +51,25 @@ node {
             if(currentBuild.rawBuild.getCause(hudson.triggers.SCMTrigger$SCMTriggerCause)!=null){
                 echo "Esto solo se ejecuta si la causa es un lanzamiento debido a cambio en el repo"
             }
-            if(currentBuild.buildCause(hudson.model.Cause$UserIdCause)!=null){
-                echo "Esto solo se ejecuta si la causa es un lanzamiento manual"
-            }
-            if(currentBuild.buildCause(hudson.triggers.TimerTrigger$TimerTriggerCause)!=null){
-                echo "Esto solo se ejecuta si la causa es un lanzamiento basado en cron"
-            }
-            if(currentBuild.buildCause(hudson.triggers.SCMTrigger$SCMTriggerCause)!=null){
-                echo "Esto solo se ejecuta si la causa es un lanzamiento debido a cambio en el repo"
+            
+            
+            // Pongais codigo que nos permite recuperar la informacion del último build que se ejecuto correctamente
+            def buildAnterior=currentBuild.previousBuild
+            while(buildAnterior != null){
+                if(buildAnterior.result=="SUCCESS"){
+                    print buildAnterior.number
+                    copyArtifacts(
+                        filter: "$FICHERO", 
+                        fingerprintArtifacts: true, 
+                        projectName: currentBuild.projectName, 
+                        selector: specific( "${buildAnterior.number}" )
+                    )
+                    break
+                }
+                buildAnterior=buildAnterior.previousBuild
             }
             
             
-            /*
-            if (currentBuild.rawBuild.getCause(hudson.triggers.SCMTrigger$SCMTriggerCause) != null ){
-                print "Ejecutado por cambio en el repo"
-            }
-            if (currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) != null ){
-                print "Ejecutado por usuario"
-            }
-            if (currentBuild.rawBuild.getCause(hudson.triggers.TimerTrigger$TimerTriggerCause) != null ){
-                print "Ejecutado por tiempo"
-            }
-            */
         }
         stage ("Hacer las cosas") {
             echo "Hago mis cosas de mi tarea"
